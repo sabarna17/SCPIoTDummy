@@ -1,2 +1,2 @@
 # SCPIoTDummy
-SCPIoT Startup Kits
+SCP IoT Startup kit
