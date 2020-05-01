@@ -1,0 +1,26 @@
+{
+	"description": "IoT Rule",
+	"action": "IoTPackage:iot.xsjs::execute",
+	"schedules": [
+		{
+			"description": "Iot Rule",
+			"xscron": "* * * * * * 14,29,44,59",
+			"parameter": {
+				"myJobParamter": "paramterValue"
+			}
+		}
+	]
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+

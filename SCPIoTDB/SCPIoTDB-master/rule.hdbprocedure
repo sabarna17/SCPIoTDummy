@@ -1,0 +1,81 @@
+PROCEDURE "IOTSCHEMA"."IoTPackage::rule" (  
+        IN FLAG_SET varchar(1),
+		OUT UNID VARCHAR(100)
+	)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER
+AS
+	lv_temp INTEGER; 
+	lv_unid VARCHAR(60); 
+	lv_max INTEGER; 
+	lv_QUERY VARCHAR(500); 
+	lv_count INTEGER;
+	lv_flag varchar(1);
+BEGIN
+
+	IF FLAG_SET = 'X' THEN
+	   -- This is Reset the FM Table 
+	    SELECT MAX(ID) INTO LV_MAX FROM "IOTSCHEMA"."IoTPackage::iotdb.FM" WHERE UNID LIKE '%DEVICE1%SENSOR1%' ;
+	    
+	    IF  :lv_max IS NOT NULL THEN
+		  SELECT FLAG, UNID INTO LV_FLAG, lv_unid FROM "IOTSCHEMA"."IoTPackage::iotdb.FM" WHERE ID = :lv_max;
+		  IF (LV_FLAG = 'N') THEN
+		      --  UNID = LV_FLAG;
+		    lv_QUERY = 'UPDATE "IOTSCHEMA"."IoTPackage::iotdb.FM" SET FLAG = ''Y'' WHERE ID = ' || :lv_max || 
+		               ' AND UNID = ''' || :lv_unid || '''';
+		    UNID = lv_unid;        		        
+		  END IF;
+		END IF;
+		UNID = :lv_max;
+	ELSE
+-- 		UNID = 'CHECK';
+
+    	SELECT TEMP, DEVICE_ID || '|' || SENSOR_ID || '|' || TIMESTAMP  || '|' || TEMP AS UNID
+            INTO lv_temp, lv_unid
+	        FROM "IOTSCHEMA"."IoTPackage::iotdb.SENSOR_DATA"
+	        WHERE TIMESTAMP = ( SELECT MAX(TIMESTAMP)
+		    FROM "IOTSCHEMA"."IoTPackage::iotdb.SENSOR_DATA" );
+		UNID = lv_unid;
+	    SELECT COUNT(*)
+		    INTO lv_count
+		    FROM "IOTSCHEMA"."IoTPackage::iotdb.FM";
+
+    ---------
+    -- psudo code for Thresholds 
+    -- SELECT THRESHOLD FROM SENSOR_MASTER
+    -- Validate with the SEN VAL
+    ---------
+
+    		
+	    IF (lv_count = 0) THEN 
+		    IF (lv_temp > 60) THEN
+			    lv_QUERY = 'INSERT INTO "IOTSCHEMA"."IoTPackage::iotdb.FM" VALUES ( 1, ''N'' ,''' || :lv_unid || ''')';
+			    UNID = lv_unid;
+		    ELSE 
+		        UNID = ' ';
+		    END IF;
+	    ELSE
+		    IF (lv_temp > 60) THEN
+		        SELECT MAX(ID) INTO LV_MAX FROM "IOTSCHEMA"."IoTPackage::iotdb.FM" WHERE UNID LIKE '%DEVICE1%SENSOR1%' ;
+		        IF  lv_max IS NOT NULL THEN
+		            SELECT FLAG INTO LV_FLAG FROM "IOTSCHEMA"."IoTPackage::iotdb.FM" WHERE ID = :lv_max;
+		            IF ( LV_FLAG = 'Y' ) THEN
+		                SELECT MAX(ID) INTO LV_MAX FROM "IOTSCHEMA"."IoTPackage::iotdb.FM";
+		                lv_max = lv_count + 1;
+			            lv_QUERY = 'INSERT INTO "IOTSCHEMA"."IoTPackage::iotdb.FM" VALUES ( ' || :lv_max || ', ''N'',''' || :lv_unid || ''')';
+			            UNID = lv_unid;        		        
+			        ELSE
+			            UNID = ' ';
+		            END IF;	
+		        END IF;
+		    ELSE 
+		        UNID = ' ';
+		    END IF;
+	    END IF;
+	END IF;
+
+    IF lv_QUERY IS NOT NULL  THEN
+        EXECUTE IMMEDIATE lv_QUERY;
+        COMMIT WORK;
+    END IF;
+END;

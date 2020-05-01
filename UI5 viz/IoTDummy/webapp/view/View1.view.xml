@@ -1,0 +1,45 @@
+<mvc:View controllerName="iotStartup.IoTDummy.controller.View1" xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+	xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:si="sap.suite.ui.commons.statusindicator"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz="sap.viz.ui5.controls" xmlns:viz.data="sap.viz.ui5.data">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<!--<Page id="page" title="{i18n>title}">-->
+				<Page id="page">
+					<headerContent>
+						<Toolbar class="sapUiMediumMarginTop">
+						<!--class="cssColor"-->
+							<!--<Text text="{i18n>title}" class="cssHeaderText"/>-->
+							<ObjectStatus text="Sensor ON" icon="sap-icon://status-positive" state="Success" />
+							<Button id="EXE" text="Close the ticket" class="cssHeaderButton" type="Emphasized" icon="sap-icon://action" press="onEXEPress"/>
+						</Toolbar>
+					</headerContent>
+					<content>
+						<l:FixFlex id='chartFixFlex' minFlexSize="450">
+							<!--Below is the setting panel-->
+							<l:flexContent>
+								<viz:Popover id="idPopOver"></viz:Popover>
+								<viz:VizFrame id="idVizFrame" uiConfig="{applicationSet:'fiori'}" height='100%' width="100%" vizType='line'>
+									<viz:dataset>
+										<viz.data:FlattenedDataset data='{path : "/results"}'>
+											<viz.data:dimensions>
+												<viz.data:DimensionDefinition name="TIMESTAMP" value="{TIMESTAMP}"/>
+											</viz.data:dimensions>
+											<viz.data:measures>
+												<viz.data:MeasureDefinition name="Temperature" value="{TEMP}"/>
+											</viz.data:measures>
+										</viz.data:FlattenedDataset>
+									</viz:dataset>
+									<viz:feeds>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Temperature"/>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="TIMESTAMP"/>
+									</viz:feeds>
+								</viz:VizFrame>
+							</l:flexContent>
+						</l:FixFlex>
+					</content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

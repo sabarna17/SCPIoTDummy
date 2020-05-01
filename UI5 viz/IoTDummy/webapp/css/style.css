@@ -1,0 +1,21 @@
+/* Enter your custom styles here */
+
+/* Enter your custom styles here */
+.cssColor
+{
+	background: black;
+	left: 0;
+	
+}
+.cssHeaderText{
+	color: black;
+    font-family: unset;
+    font-size: larger;
+    font-weight: bold;
+    left: 0;
+}
+
+sapUiSizeCompact .cssPopup {
+	width: 250px ;
+    height: 20rem ;
+}

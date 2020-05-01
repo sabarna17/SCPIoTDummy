@@ -1,0 +1,44 @@
+namespace IoTPackage;
+@Schema: 'IOTSCHEMA' 
+context iotdb {
+   
+    type myKeyType: String(60);
+    type timestamp: String(14);
+   
+    Entity FM{
+       key ID: Integer;
+       FLAG: String(1);
+       UNID: String(100); 
+        // IF -N-> Then FM is created triggered the next Flow
+        //   -Y-> Then FM is resolved and ready for Nex    
+       
+   };
+   
+    Entity SENSOR_DATA {
+        key DEVICE_ID : myKeyType;
+        key SENSOR_ID : myKeyType;
+        key TIMESTAMP : timestamp;
+        TEMP : String (5);
+    };   
+    
+    Entity DEVICE_MASTER {
+        key DEVICE_ID: myKeyType;
+        DESC : myKeyType;
+        LAT: String(20);
+        LNG: String(20);
+        MATNR: String(40);
+    }
+
+    Entity SENSOR_MASTER {
+        key SENSOR_ID: myKeyType;
+        key DEVICE_ID: myKeyType;
+        DESC : myKeyType;
+        THRESHOLD: myKeyType;
+    }
+    
+    Entity XSJOB{
+        key ID: Integer;
+        DESC: String(100);
+    };    
+     
+};

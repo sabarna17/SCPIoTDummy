@@ -1,0 +1,3 @@
+service  { 
+   "IOTSCHEMA"."IoTPackage::iotdb.SENSOR_DATA" as "IOTDATA";                             
+}  
