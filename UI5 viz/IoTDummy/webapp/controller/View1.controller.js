@@ -38,7 +38,7 @@ sap.ui.define([
 					// "url": "/SCPNTT_DB/SCPNTT_TRAIN/odata.xsodata/IOTDATA?$format=json",
 					"method": "GET",
 					"headers": {
-						"authorization": "Basic U1lTVEVNOnNhcGhhbmFkYkBGRUIyMDIw",
+						"authorization": "Basic XXXXXX",
 						"accept": "application/json",
 						"content-type": "application/json",
 						"cache-control": "no-cache"
@@ -99,7 +99,7 @@ sap.ui.define([
 				"url": "/SCPNTT_DB/IoTPackage/fm_success.xsjs?DEVICE_ID=DEVICE1&SENSOR_ID=SENSOR1",
 				"method": "GET",
 				"headers": {
-    				"authorization": "Basic U1lTVEVNOnNhcGhhbmFkYkBGRUIyMDIw",
+    				"authorization": "Basic XXXXXXX",
     				"content-type": "application/json",
     				"cache-control": "no-cache",
     				"postman-token": "bc6b4fe6-b68f-558b-eaa8-2cf5f8078016"
